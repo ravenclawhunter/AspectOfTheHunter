@@ -225,7 +225,7 @@ AOTH.families = {
 {"Warp Stalker" ,CUNNING ,NOT_EXOTIC},
 {"Wasp"         ,FEROCITY,NOT_EXOTIC},
 {"Water Strider",CUNNING ,IS_EXOTIC },
-{"Wind Serpent" ,FEROCITY,NOT_EXOTIC},
+{"Wind Serpent",FEROCITY,NOT_EXOTIC},
 {"Wolf"         ,FEROCITY,NOT_EXOTIC},
 {"Worm"         ,TENACITY,IS_EXOTIC },
 {"Unclassifide" ,"n"     ,NOT_EXOTIC}
@@ -256,7 +256,7 @@ AOTH.famSkills = {
     ["Dragonhawk"   ] = DRAGONHAWKS_SKILLS,
     ["Feathermane"  ] = FEATHERMANES_SKILLS,
     ["Fox"          ] = FOX_SKILLS,
-    ["Goat"         ] = GOAT_SKILLS,
+    ["Gruffhorn"    ] = GOAT_SKILLS,
     ["Gorilla"      ] = GORILLA_SKILLS,
     ["Hydra"        ] = HYDRA_SKILLS,
     ["Hyena"        ] = HYENA_SKILLS,
@@ -288,7 +288,7 @@ AOTH.famSkills = {
     ["Warp Stalker" ] = WARP_STALKERS_SKILLS,
     ["Wasp"         ] = WASP_SKILLS,
     ["Water Strider"] = WATER_STRIDER_SKILLS,
-    ["Wind Serpent" ] = WIND_SERPENTS_SKILLS,
+    ["Wind Serpent"] = WIND_SERPENTS_SKILLS,
     ["Wolf"         ] = WOLF_SKILLS,
     ["Worm"         ] = WORMS_SKILLS,
 }
