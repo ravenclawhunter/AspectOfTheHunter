@@ -122,7 +122,7 @@ function AOTH:LoadOptions()
                     },
                     ResizeStableIcon = {
                         name = "Smaller Stable Master Icons",
-                        desc = "Enableing this option allows you to shrink the master icons!",
+                        desc = "Enabling this option allows you to shrink the master icons!",
                         type = "toggle",
                         order = 4,
                         get = function()
@@ -138,7 +138,7 @@ function AOTH:LoadOptions()
                     },
                     MinimalMapIcons = {
                         name = "Smaller Map Icons",
-                        desc = "Enableing this option will shrink and set a basic tooltip to all other pins except the first location of the pet you are after. This requires you to reload your UI... You can do so by typing |cFF00FF00 /rl",
+                        desc = "Enabling this option will shrink and set a basic tooltip to all other pins except the first location of the pet you are after. This requires you to reload your UI... You can do so by typing |cFF00FF00 /rl",
                         type = "toggle",
                         order = 5,
                         get = function()
