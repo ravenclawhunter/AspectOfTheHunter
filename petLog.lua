@@ -2,7 +2,7 @@ local addon = LibStub("AceAddon-3.0"):GetAddon("AspectOfTheHunter", "AceEvent-3.
 local AddOnName, AOTH = ...;
 
 
-if(UnitClass("player") ~= "Hunter") then return end
+
 local NUM_OF_ENTRIES = 8
 local maxSlots = NUM_PET_STABLE_PAGES * NUM_PET_STABLE_SLOTS;
 
@@ -11,8 +11,6 @@ local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("ADDON_LOADED")
 eventFrame:RegisterEvent("PLAYER_LOGOUT")
 eventFrame:RegisterEvent("PET_STABLE_SHOW")
-
-
 
 function eventFrame:OnEvent(event, arg1)
     
@@ -31,7 +29,7 @@ function eventFrame:OnEvent(event, arg1)
     end
 
     if(event == "PET_STABLE_SHOW") then
-        --ScanStable()
+        ScanStable()
     end
 
 

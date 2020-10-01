@@ -5,7 +5,7 @@ local petSlots = NUM_PET_STABLE_SLOTS;
 
 local maxSlots = NUM_PET_STABLE_PAGES * NUM_PET_STABLE_SLOTS;
 
-local NUM_PER_ROW = 4
+local NUM_PER_ROW = 10
 local heightChange = 65
 local offSet = 40;
 local ICON_SIZE = 32
@@ -13,8 +13,8 @@ local ACTIVE_PETS = 5
 local TEX_COUNT = 1
 
 
-PetStableFrame:SetWidth(768)
-PetStableFrame:SetHeight(PetStableStabledPet1:GetHeight() / (NUM_PER_ROW + 0.6) * maxSlots)
+PetStableFrame:SetWidth(1200)
+PetStableFrame:SetHeight(PetStableStabledPet1:GetHeight() / (NUM_PER_ROW + 1.6) * maxSlots)
 PetStableFrame:SetMovable(true)
 PetStableFrame:EnableMouse(true)
 PetStableFrame:RegisterForDrag("LeftButton")
@@ -29,7 +29,7 @@ PetStableFrameModelBg:Hide()
 PetStableModelShadow:Hide()
 PetStablePetInfo:Hide()
 
-PetStableFrameModelBg:SetWidth(PetStableFrameInset:GetWidth() - (PetStableStabledPet1:GetWidth() * 4))
+PetStableFrameModelBg:SetWidth(PetStableFrameInset:GetWidth() - (PetStableStabledPet1:GetWidth() * 9))
 PetStableFrameModelBg:SetHeight(PetStableFrame:GetHeight() - offSet)
 
 PetStablePetInfo:ClearAllPoints()
@@ -39,9 +39,9 @@ PetStableActiveBg:SetHeight(PetStableLeftInset:GetHeight())
 
 local PetStableInfo = CreateFrame("Frame", "PetInfo", PetStableFrameInset, "ShadowOverlaySmallTemplate");
 PetStableInfo:SetFrameStrata("HIGH")
-PetStableInfo:SetWidth(PetStableFrameInset:GetWidth() - (PetStableStabledPet1:GetWidth() * 4))
+PetStableInfo:SetWidth(PetStableFrameInset:GetWidth() - (PetStableStabledPet1:GetWidth() * (NUM_PER_ROW * 1.2)))
 PetStableInfo:SetHeight(80)
-PetStableInfo:SetPoint("TOP", PetStableFrameInset, -(PetStableStabledPet1:GetWidth() + 25), -5)
+PetStableInfo:SetPoint("TOPRIGHT", PetStableFrameInset, -(PetStableStabledPet1:GetWidth() * 10), -5)
 
 
 local PstTex = PetStableInfo:CreateTexture(nil, "BACKGROUND")
@@ -104,7 +104,7 @@ for i = 1, containers do
     container:SetFrameStrata("TOOLTIP")
     
     if (i == 1) then
-        container:SetWidth(PetStableInfo:GetWidth() / 2.1)
+        container:SetWidth(PetStableInfo:GetWidth() / 2.5)
         container:SetPoint("TOPLEFT", PetStableInfo, 0, 0)
     else
         container:SetWidth(PetStableInfo:GetWidth() / 3.5)
@@ -318,7 +318,7 @@ for i = 1, maxSlots do
 end
 
 PetStableStabledPet1:ClearAllPoints()
-PetStableStabledPet1:SetPoint("TOPRIGHT", PetStableFrameInset, -PetStableStabledPet1:GetWidth() * NUM_PER_ROW, -9)
+PetStableStabledPet1:SetPoint("TOPRIGHT", PetStableFrameInset, -PetStableStabledPet1:GetWidth() * NUM_PER_ROW - PetStableStabledPet1:GetWidth() * 1.4, -9)
 
 
 

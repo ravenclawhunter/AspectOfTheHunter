@@ -1,8 +1,6 @@
 AspectOfTheHunter = LibStub("AceAddon-3.0"):NewAddon("AspectOfTheHunter", "AceConsole-3.0", "AceEvent-3.0")
 AddOnName, AOTH = ...;
 
-if(UnitClass("player") ~= "Hunter") then return end
-
 -- this is a branch test
 AOTH.constants = {
     ADDON_NAME = "AspectOfTheHunter",
@@ -19,9 +17,6 @@ AOTH.colors = {
 
 function AspectOfTheHunter:OnInitialize()
     
-    SendAddonMessage("TEST", "HI THIS IS TEXT")
-
-
     local DEFAULTS = {
         profile = {
             general = {
@@ -127,7 +122,7 @@ function AOTH:LoadOptions()
                     },
                     ResizeStableIcon = {
                         name = "Smaller Stable Master Icons",
-                        desc = "Enabling this option allows you to shrink the master icons!",
+                        desc = "Enableing this option allows you to shrink the master icons!",
                         type = "toggle",
                         order = 4,
                         get = function()
@@ -143,7 +138,7 @@ function AOTH:LoadOptions()
                     },
                     MinimalMapIcons = {
                         name = "Smaller Map Icons",
-                        desc = "Enabling this option will shrink and set a basic tooltip to all other pins except the first location of the pet you are after. This requires you to reload your UI... You can do so by typing |cFF00FF00 /rl",
+                        desc = "Enableing this option will shrink and set a basic tooltip to all other pins except the first location of the pet you are after. This requires you to reload your UI... You can do so by typing |cFF00FF00 /rl",
                         type = "toggle",
                         order = 5,
                         get = function()

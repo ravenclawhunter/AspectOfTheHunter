@@ -3,7 +3,7 @@ AddOnName, AOTH = ...;
 AspectOfTheHunter = LibStub("AceAddon-3.0"):GetAddon("AspectOfTheHunter")
 local HBD = LibStub("HereBeDragons-2.0")
 local petPins = LibStub("HereBeDragons-Pins-2.0")
-if(UnitClass("player") ~= "Hunter") then return end
+
 
 ----------------------------------------------------------
 -- TODO
@@ -398,10 +398,10 @@ function AspectOfTheHunter:ShowPinTooltip(pin)
             GameTooltip:SetText(npcName .. " (" .. npcFamily .. ") ", npcColor[1], npcColor[2], npcColor[3]);
         end
         if (npcMINLevel == npcMAXLevel) then
-            GameTooltip:AddLine("Level " .. npcMAXLevel .. " ", 1, 1, 1);
+            GameTooltip:AddLine("Level " .. npcMAXLevel / 2 .. " ", 1, 1, 1);
         else
             
-            GameTooltip:AddLine(string.format("|c0070ddff%-6s|r%s |c00ffffff%d|r\n|c0070ddff%-5s|r%s |c00ffffff%d|r\n|c00ff0000%s", "MIN", "Level: ", npcMINLevel, "MAX", "Level: ", npcMAXLevel, npcType));
+            GameTooltip:AddLine(string.format("|c0070ddff%-6s|r%s |c00ffffff%d|r\n|c0070ddff%-5s|r%s |c00ffffff%d|r\n|c00ff0000%s", "MIN", "Level: ", npcMINLevel / 2 , "MAX", "Level: ", npcMAXLevel / 2, npcType));
         end
         GameTooltip:AddLine(npcClass, 0.7, 0.7, 0.7);
         
