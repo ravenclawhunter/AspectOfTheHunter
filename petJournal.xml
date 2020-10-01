@@ -1,0 +1,78 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+	<Font name="fontNormal" font="AchievementFont_Small" virtual="true">
+		<Color r="1" g="1" b="1" />
+		<FontHeight>
+			<AbsValue val="11" />
+		</FontHeight>
+	</Font>
+	<Font name="fontHighlight" font="AchievementFont_Small" virtual="true">
+		<Color r="1" g="1" b="0" />
+		<FontHeight>
+			<AbsValue val="11" />
+		</FontHeight>
+	</Font>
+	<Button name="MyModEntryTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="265" y="30" />
+		</Size>
+		<NormalFont style="fontNormal" />
+		<HighlightFont style="fontHighlight"/>
+		<Backdrop bgFile="" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="4" right="4" top="4" bottom="4" />
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="16" />
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="16" />
+			</EdgeSize>
+		</Backdrop>
+	</Button>
+	<Frame name="HunterPetJournal2" parent="PetStableFrame" enableMouse="true">
+		<Size>
+			<AbsDimension x="300" y="0" />
+		</Size>
+		<Anchors>
+			<Anchor point="RIGHT" x="300" y="0" />
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="4" right="4" top="4" bottom="4" />
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="16" />
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="16" />
+			</EdgeSize>
+		</Backdrop>
+		<Layers>
+			<Layer>
+				<FontString name="petLogFontString" font="Fonts\FRIZQT__.TTF" text="Tamed Pet Log" justifyH="CENTER" justifyV="TOP">
+					<Color r="1" g="1" b="0" a="1" />
+					<FontHeight val="14" />
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeTo="$parent" x="100" y="-20" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<ScrollFrame name="MyModScrollBar" inherits="FauxScrollFrameTemplate" hidden="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="-8" />
+						</Offset>
+					</Anchor>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset>
+							<AbsDimension x="-30" y="8" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</ScrollFrame>
+		</Frames>
+	</Frame>
+</Ui>

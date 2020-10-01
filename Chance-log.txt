@@ -1,0 +1,62 @@
+v1.0.1ALPHA 
+
+- Added all zones (and pets) that contain rare pets to database
+- fixed graphical issue due to having to many frames loaded
+- cleaned up code a bit :D!
+- moved menu button to TOPRIGHT of map as it conflicted with the WQ addon!
+
+  v1.1.0ALPHA
+
+- Added the ability to auto create a macro with the pets in the zone called AOTH in general macros
+- Added Auto pet detection which adds a skull and alerts in chat that a pet is found (only if nameplates are on always show)
+- cleaned up database
+- small optimization to code to help with memory control
+- Put pet families in their respective specialization (eg Ferocity) for searching
+- Added exotic search function
+
+v1.2.0ALPHA
+
+- Moved map icon to bar above map to not interfere with other addons for now
+- updated the stable UI
+- started adding information and levels to the rare pets
+- started localizing the addon to work in other languages
+- Stopped addon from searching when in any instance or rest zone to save on graphic lag
+- Started to orginise code to be more efficient 
+
+v1.2.1ALPHA
+
+- Fixed overlapping issue for pet details when selecting pet in stables
+- Fixed issue when Active pets werent showing details when selected
+- Updated pet icons to match the family
+
+v1.3.0ALPHA
+- updated data base
+- added new beast lore ability when hovering over a beast will show you the information
+- [EXPERIMENTAL] - new pet logging system that will allow you to catch and release and have a log of your tame
+- fixed a few bugs that were brought up
+
+v1.4.0ALPHA
+
+NEW
+
+- Pet logging system (Basic)
+- Enabled data to be save between sessions
+
+Quality Of Life Updates
+
+- changed the colour for the pet stable banner for better visibility of text
+- update data base and added EVERY pet (i hope) in for beast lore hovering 
+- Added rare / elite pets to DB for hunting.
+- Added min and max levels to tooltip for pets
+
+
+FIXES
+
+- Removed LUA error when highlighting NPC's 
+- Removed auto macro creation as its no longer needed
+- Cleaned up duplicate code to save on memory
+
+v1.4.1
+
+FIXES
+- Fixed in correct level from being shown
