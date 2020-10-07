@@ -28,12 +28,7 @@ local methods = {
 		if self.noAutoHeight then return end
 		self:SetHeight(height or 0)
 	end,
-    ["SetSize"] = function(self, x, y)
-        
-        self:SetWidth(x)
-        self:SetHeight(y)
-    
-    end,
+
 	["OnWidthSet"] = function(self, width)
 		local content = self.content
 		content:SetWidth(width)

@@ -5,7 +5,7 @@ local AddOnName, AOTH = ...;
 
 local NUM_OF_ENTRIES = 8
 local maxSlots = NUM_PET_STABLE_PAGES * NUM_PET_STABLE_SLOTS;
-
+local PETFOUND = false
 local eventFrame = CreateFrame("Frame")
 
 eventFrame:RegisterEvent("ADDON_LOADED")
@@ -27,8 +27,8 @@ function eventFrame:OnEvent(event, arg1)
         
         petlogDB = petlogDB;
     end
-
-    if(event == "PET_STABLE_SHOW") then
+    
+    if (event == "PET_STABLE_SHOW") then
         ScanStable()
     end
 
@@ -56,12 +56,15 @@ function OnTooltipSetUnit(self)
     if not (AOTH.db.general.BeastLoreTooltip) then
         local unitID = UnitGUID("mouseover")
         if not (unitID == nil or select(1, ("-"):split(unitID)) == "Pet") then
+            
             if (unitID ~= nil) then
+                
                 local creatureFamily = UnitCreatureFamily("mouseover")
                 local npc_id = select(6, ("-"):split(unitID));
                 local spellList = ""
                 for i = 1, #AOTH.tamablePets do
                     if (AOTH.tamablePets[i] == tonumber(npc_id)) then
+                        PETFOUND = true
                         GameTooltip:AddDoubleLine("|cFF00FF00TAMEABLE!|r");
                         for family, data in pairs(AOTH.families) do
                             if (creatureFamily == data[1] and data[3]) then
@@ -93,8 +96,12 @@ function OnTooltipSetUnit(self)
                         end
                     end
                 end
-            
+                
+                CanBeTamed(PETFOUND)
+                PETFOUND = false
             end
+
+            
         else
             if (unitID ~= nil) then
                 local petID = select(6, ("-"):split(unitID))
@@ -115,7 +122,25 @@ function OnTooltipSetUnit(self)
     end
 end
 
+function CanBeTamed(PETFOUND)
+    local creatureType = UnitCreatureType("mouseover")
+    local creatureFamily = UnitCreatureFamily("mouseover")
+    if (C_QuestLog.IsQuestFlaggedCompleted(46337) == false and creatureFamily == "Feathermane") then
+            
+        GameTooltip:AddLine("|cFFFF0000You Cannot Tame this pet because you\nhave not completed|r [Night of the Wilds]");
+        
+    end
 
+    if (PETFOUND == false and creatureType == "Beast") then
+                        
+        
+            GameTooltip:AddLine("|cFFFF0000Cannot Be Tamed!");
+            
+        
+    end
+
+   
+end
 
 
 local function LogPet(npc_id, spellID, pet_name)
@@ -151,8 +176,8 @@ function ScanStable()
     if AOTH.constants.DEBUG then return end
     
     
-
-
+    
+    
     for i = 1, maxSlots + 5 do
         if (i <= 5) then
             local selectedActivePet = _G["PetStableActivePet" .. i]
@@ -160,34 +185,33 @@ function ScanStable()
                 SetPetStablePaperdoll(PetStableModel, selectedActivePet.petSlot)
                 petinfo = PetStableModel:GetDisplayInfo()
                 local icon, name, level, family, talent = GetStablePetInfo(selectedActivePet.petSlot)
-
-                for i=1, #AOTH.petscan do 
-
-                    if(petinfo == AOTH.petscan[i][1]) then print("PET FOUND") end
-
-                end
                 
-           --print("ACTIVE Pet: [SLOT ".. i .. "] |cFF00FF00" .. name .. " " .. family .. "  ICON " .. petinfo )
+                for i = 1, #AOTH.petscan do
+                    
+                    if (petinfo == AOTH.petscan[i][1]) then print("PET FOUND") end
+                
+                end
             
+            --print("ACTIVE Pet: [SLOT ".. i .. "] |cFF00FF00" .. name .. " " .. family .. "  ICON " .. petinfo )
             end
-         else
+        else
             
             local selectedStabledPet = _G["PetStableStabledPet" .. i - 5]
             if (_G["PetStableStabledPet" .. i - 5].tooltip ~= "Empty Stable Slot") then
                 SetPetStablePaperdoll(PetStableModel, selectedStabledPet.petSlot)
                 petinfo = PetStableModel:GetDisplayInfo()
                 local icon, name, level, family, talent = GetStablePetInfo(selectedStabledPet.petSlot)
-
-                for i=1, #AOTH.petscan do 
-
-                    if(petinfo == AOTH.petscan[i][1]) then print("PET FOUND") end
-
-                end
                 
-               -- print("STABLED Pet: [SLOT ".. i .. "]|cFF00FF00" .. name .. " " .. family)
+                for i = 1, #AOTH.petscan do
+                    
+                    if (petinfo == AOTH.petscan[i][1]) then print("PET FOUND") end
+                
+                end
+            
+            -- print("STABLED Pet: [SLOT ".. i .. "]|cFF00FF00" .. name .. " " .. family)
             end
         end
-        
+    
     end
     AOTH:Print("Stables have been scanned!")
 end

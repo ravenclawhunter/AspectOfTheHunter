@@ -1,7 +1,7 @@
 --[[-----------------------------------------------------------------------------
 Frame Container
 -------------------------------------------------------------------------------]]
-local Type, Version = "Frame", 26
+local Type, Version = "Frame", 27
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -37,10 +37,10 @@ local function Frame_OnMouseDown(frame)
 	AceGUI:ClearFocus()
 end
 
---[[ local function Title_OnMouseDown(frame)
+local function Title_OnMouseDown(frame)
 	frame:GetParent():StartMoving()
 	AceGUI:ClearFocus()
-end ]]
+end
 
 local function MoverSizer_OnMouseUp(mover)
 	local frame = mover:GetParent()
@@ -87,7 +87,7 @@ local methods = {
 		self:SetStatusText()
 		self:ApplyStatus()
 		self:Show()
-        self:EnableResize(false)
+        self:EnableResize(true)
 	end,
 
 	["OnRelease"] = function(self)
@@ -167,10 +167,7 @@ Constructor
 local FrameBackdrop = {
 	bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
 	edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
-	tile = true, 
-	tileEdge = false,
-	tileSize = 32, 
-	edgeSize = 32,
+	tile = true, tileSize = 32, edgeSize = 32,
 	insets = { left = 8, right = 8, top = 8, bottom = 8 }
 }
 
@@ -182,22 +179,15 @@ local PaneBackdrop  = {
 }
 
 local function Constructor()
-	local frame = CreateFrame("Frame", "InfoFrame", UIParent, "InsetFrameTemplate3")
-	
-	frame:SetClampedToScreen(true)
+	local frame = CreateFrame("Frame", "InfoFrame", UIParent, BackdropTemplateMixin and "BackdropTemplate" or nil)
 	frame:Hide()
 
 	frame:EnableMouse(true)
-	frame:SetMovable(false)
-	frame:SetResizable(false)
+	frame:SetMovable(true)
+	frame:SetResizable(true)
 	frame:SetFrameStrata("FULLSCREEN_DIALOG")
-
-	local scrollbg = frame:CreateTexture(nil, "BACKGROUND")
-	scrollbg:SetTexture("Interface\\DialogFrame\\UI-DialogBox-Background")
-	scrollbg:SetAllPoints(frame)
-	scrollbg:SetColorTexture(0, 0, 0, 0.4)
-	--frame:SetBackdrop(FrameBackdrop)
-	--frame:SetBackdropColor(0, 0, 0, 1)
+	frame:SetBackdrop(FrameBackdrop)
+	frame:SetBackdropColor(0, 0, 0, 1)
 	frame:SetMinResize(400, 200)
 	frame:SetToplevel(true)
 	frame:SetScript("OnShow", Frame_OnShow)
@@ -211,14 +201,13 @@ local function Constructor()
 	closebutton:SetWidth(100)
 	closebutton:SetText(CLOSE)
 
-	local statusbg = CreateFrame("Button", nil, frame,"TooltipBorderedFrameTemplate")
+	local statusbg = CreateFrame("Button", nil, frame, BackdropTemplateMixin and "BackdropTemplate" or nil)
 	statusbg:SetPoint("BOTTOMLEFT", 15, 15)
 	statusbg:SetPoint("BOTTOMRIGHT", -132, 15)
 	statusbg:SetHeight(24)
-
-	--statusbg:SetBackdrop(PaneBackdrop)
-	--statusbg:SetBackdropColor(0.1,0.1,0.1)
-	--statusbg:SetBackdropBorderColor(0.4,0.4,0.4)
+	statusbg:SetBackdrop(PaneBackdrop)
+	statusbg:SetBackdropColor(0.1,0.1,0.1)
+	statusbg:SetBackdropBorderColor(0.4,0.4,0.4)
 	statusbg:SetScript("OnEnter", StatusBar_OnEnter)
 	statusbg:SetScript("OnLeave", StatusBar_OnLeave)
 
@@ -320,8 +309,7 @@ local function Constructor()
 		widget[method] = func
 	end
 	closebutton.obj, statusbg.obj = widget, widget
-	InfoFrame = frame
-	tinsert(UISpecialFrames, frame:GetName())
+
 	return AceGUI:RegisterAsContainer(widget)
 end
 

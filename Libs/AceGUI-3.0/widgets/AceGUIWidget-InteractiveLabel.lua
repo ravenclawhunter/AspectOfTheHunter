@@ -41,10 +41,6 @@ local methods = {
 		self.highlight:SetTexture(...)
 	end,
 
-	["SetHighlightText"] = function(self, ...)
-		self.highlight:SetTextColor(...)
-	end,
-
 	["SetHighlightTexCoord"] = function(self, ...)
 		local c = select("#", ...)
 		if c == 4 or c == 8 then

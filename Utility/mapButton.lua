@@ -12,8 +12,9 @@ function AOTH:initCheck()
     
     for i = 1, #AOTH.families do
         checkFamily[i] = false
-    
+        
     end
+    
     
     --[[for i = 1, #AOTH.zones do
         zonecheck[i] = false

@@ -11,7 +11,7 @@ AOTH.colors = {
     Rare = {0.0, 0.44, 0.87},
     Rare_Elite = {0.64, 0.19, 0.79},
     Elite = {1, 0.4, 0},
-    ["Stable Master"] = {1,1,1}
+    ["Stable Master"] = {1, 1, 1}
 };
 
 
@@ -29,8 +29,8 @@ function AspectOfTheHunter:OnInitialize()
             }
         }
     }
-
-
+    
+    
     
     self.db = LibStub("AceDB-3.0"):New("AspectDB", DEFAULTS)
     AOTH.db = self.db.profile;
@@ -39,9 +39,9 @@ function AspectOfTheHunter:OnInitialize()
     self:CheckZone();
     AOTH:LoadOptions()
     PET_MODELS = AOTH:LoadPetModels()
-    
-        
-    
+
+
+
 
 end
 
@@ -100,7 +100,7 @@ function AOTH:LoadOptions()
                         set = function(_, value)
                             AspectOfTheHunter:UpdateMinimapPlugin()
                             AOTH.db.general.ToggleMiniMapIcon = value
-                            
+                        
                         end,
                         width = "full",
                     },
@@ -116,7 +116,7 @@ function AOTH:LoadOptions()
                         set = function(_, value)
                             
                             AOTH.db.general.BeastLoreTooltip = value
-                            
+                        
                         end,
                         width = "full",
                     },
@@ -132,7 +132,7 @@ function AOTH:LoadOptions()
                         set = function(_, value)
                             
                             AOTH.db.general.ResizeStableIcon = value
-                            
+                        
                         end,
                         width = "full",
                     },
@@ -148,7 +148,7 @@ function AOTH:LoadOptions()
                         set = function(_, value)
                             
                             AOTH.db.general.MinimalMapIcons = value
-                            
+                        
                         end,
                         width = "full",
                     },
@@ -222,20 +222,22 @@ local ldb = LibStub("LibDataBroker-1.1"):NewDataObject("AspectOfTheHunter", {
 
 local popup;
 local active = false
+MyModData = {}
 function ldb.OnClick(self, button)
     
     local shift_key = IsShiftKeyDown()
     
     tinsert(UISpecialFrames, PetStableFrame:GetName())
     if button == "RightButton" then
-        if(IsShiftKeyDown()) then
-            InterfaceOptionsFrame_OpenToCategory("Aspect Of The Hunter")InterfaceOptionsFrame_OpenToCategory("Aspect Of The Hunter") -- need to call this twice due to a blizzard bug
+        if (shift_key) then
+            InterfaceOptionsFrame_OpenToCategory("Aspect Of The Hunter")InterfaceOptionsFrame_OpenToCategory("Aspect Of The Hunter")-- need to call this twice due to a blizzard bug
         elseif (PetStableFrame:IsVisible()) then
             
             PetStableFrame:Hide()
         else
             PetStableFrame:Show()
         end
+    
     else
         if not (active and popup) then
             popup = addon:Create("Frame")
@@ -248,50 +250,34 @@ function ldb.OnClick(self, button)
                     links:Hide()
                 
                 end
-                copyBox:Hide()
+            
             end)
+            active = true
             popup:SetLayout("Flow")
             
+            test = addon:Create("InlineGroup")
+            test:SetTitle("TAMED PETS")
             
-            
-            
-            MainScroll = addon:Create("FrameBlank")
-            
-            MainScroll:SetSize(350, 400)
-            MainScroll:SetLayout("Fill")
-            
-            popup:AddChild(MainScroll)
+            test:SetLayout("Flow")
+            popup:AddChild(test)
             
             scroll = addon:Create("ScrollFrame")
+            scroll:SetHeight(350)
+            scroll:SetFullWidth(true)
             scroll:SetLayout("Flow")
-            
             scroll:SetScroll(1)
-            MainScroll:AddChild(scroll)
-            local heading = addon:Create("Heading")
-            heading:SetText("TAMED PETS")
-            heading:SetHeight(12)
-            heading:SetRelativeWidth(1)
             
-            scroll:AddChild(heading)
+            test:AddChild(scroll)
             MyMod_OnLoad()
-            LoadList()
-            
-            
-            info = addon:Create("FrameBlank")
-            info:SetLayout("Flow")
-            info:SetSize(300, 400)
-            
-            
-            PetReport()
-            
-            
-            popup:AddChild(info)
+            LoadList(scroll)
+
             
             
             
             local announce = addon:Create("InteractiveLabel")
             announce:SetFontObject(SystemFont_Outline)
             announce:SetWidth(700)
+            
             announce:SetText("|c00ffff00Keep up to date on discord at: |c0000ccff https://discord.gg/GzHEU5k |c00ffff00or on the socials @ravenclawthehunter")
             announce:SetCallback("OnClick", function()
                     
@@ -303,19 +289,12 @@ function ldb.OnClick(self, button)
             
             
             end)
-            
             popup:AddChild(announce)
-            active = true
             
-            local report_coords = addon:Create("Button")
-            report_coords:SetWidth(100)
-        else
-            copyBox:Hide()
-            links:Hide()
-            popup:Hide()
-            popup = nil
-            active = false
+        
         end
+    
+    
     
     end
 end
@@ -354,6 +333,7 @@ function AOTH:ShowPopup()
     ok1:Show()
 
 end
+
 AOTH:ShowPopup()
 MyModData = {}
 function MyMod_OnLoad()
@@ -365,7 +345,7 @@ function MyMod_OnLoad()
     end
 end
 
-function LoadList()
+function LoadList(frame)
     
     for i = 1, #MyModData do
         local loggedPetItem = addon:Create("InteractiveLabel")
@@ -375,7 +355,8 @@ function LoadList()
         loggedPetItem:SetText(i .. ": " .. MyModData[i][2])
         loggedPetItem:SetCallback("OnEnter", function(widget)widget:SetColor(1, 1, 0) end)
         loggedPetItem:SetCallback("OnLeave", function(widget)widget:SetColor(1, 1, 1) end)
-        scroll:AddChild(loggedPetItem)
+        
+        frame:AddChild(loggedPetItem)
     end
 end
 
@@ -383,99 +364,25 @@ local icon = LibStub("LibDBIcon-1.0")
 
 local f = CreateFrame("Frame")
 f:SetScript("OnEvent", function()
-    local icon = LibStub("LibDBIcon-1.0", true)
+    icon = LibStub("LibDBIcon-1.0", true)
     if not icon then return end
     if not AOTHLDBIconDB then AOTHLDBIconDB = {} end
     icon:Register(AddOnName, ldb, AOTHLDBIconDB)
 end)
 f:RegisterEvent("PLAYER_LOGIN")
 
-function PetReport()
-    
-    
-    local ok1 = CreateFrame("Button", "Okay", BlankFrame2, "UIPanelButtonTemplate")
-    ok1:SetWidth(150)
-    ok1:SetHeight(40)
-    ok1:SetFrameStrata("TOOLTIP")
-    ok1:SetPoint("BOTTOM", 0, 20)
-    ok1:SetText("Report missing pet!")
-    ok1:SetScript("OnClick", function()
-            
-            
-            
-            local position = C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit("player"), "player")
-            local petName = UnitFullName("target")
-            local petLevel = UnitLevel("target")
-            local petFamily = UnitCreatureType("target")
-            local petString = UnitGUID("target")
-            if (petString == nil) then
-                petID = petString
-            else
-                petID = select(6, ("-"):split(petString))
-            end
-            
-            if (petName == nil and petLevel == 0 and petFamily == nil and petID == nil) then
-                Report_Box_Show("|c00ff0000NO PET TARGETED!")
-            else
-                
-                Report_Box_Show("Zone Name: " .. GetZoneText() ..
-                    "\nZone ID: " .. GetMapID() ..
-                    "\nPet Name: " .. petName ..
-                    "\nPet Level: " .. petLevel ..
-                    "\nPet Family: " .. petFamily ..
-                    "\nClass: " .. UnitClassification("target") ..
-                    "\nx: " .. (position.x * 100) ..
-                    "\ny: " .. (position.y * 100) .. 
-                    "\n\n\nPlease copy and paste the above info and \npost it in discord for Raven!")
-            end
-    end)
-    ok1:Show()
 
---{ ["zone_name"] = "Westfall"                      , [ "zoneID" ] = 52   , [ "name" ] = "Vultros"                     ,["maxlevel"] =62    ,["minlevel"] =15    , ["info"] =   ""                         , ["class"] = CLASS_RARE       , ["family"] = { 7   , "Carrion Bird"  }, ["familySkills" ] = CARRION_BIRD_SKILLS  ,["displayID"] = 507   ,["id"] = 462    ,["coords"] = {{48.4  , 33    },{49,28},{49,28.6},{49,32.2},{49,33.4},{49,33.6},{49,35.2},{49.2,26.8},{49.4,26.4},{49.8,32.4},{50.2,28.2},{50.2,33},{50.4,28.8},{54.2,24.2},{54.2,25},{54.4,25.8},{54.6,24.6},{55.2,35},{55.4,23.6},{55.6,35.6},{56,34.4},{56.2,33.4},{56.4,20.8},{56.4,35.2},{56.6,35.4},{56.6,35.6},{56.8,34},{57.2,19.4},{57.4,19.8},{57.6,19.4},{57.8,20.6},{58,18},{58,20.2}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }, },
-end
-
-function Report_Box_Show(text)
-    if not ReportBox then
-        local f = CreateFrame("Frame", "ReportBox", BlankFrame2, "DialogBoxFrame")
-        f:SetPoint("TOPLEFT", 10, -10)
-        f:SetFrameStrata("TOOLTIP")
-        f:SetSize(260, 250)
-        
-        f:SetBackdrop({
-            bgFile = "",
-            edgeFile = "",
-            edgeSize = 16,
-            insets = {left = 0, right = 0, top = 0, bottom = 0},
-        })
-        f:SetBackdropBorderColor(0, .44, .87, 0.5)-- darkblue
-        
-        -- Movable
-        f:SetMovable(false)
-        f:SetClampedToScreen(true)
-        
-        
-        -- ScrollFrame
-        local sf = CreateFrame("ScrollFrame", "KethoEditBoxScrollFrame", ReportBox, "UIPanelScrollFrameTemplate")
-        sf:SetSize(260, 200)
-        sf:SetPoint("LEFT", 0, 0)
-        sf:SetPoint("RIGHT", 0, 0)
-        sf:SetPoint("TOP", 0, 0)
-        sf:SetPoint("BOTTOM", ReportBoxButton, "TOP", 0, 0)
-        
-        -- EditBox
-        local eb = CreateFrame("EditBox", "ReportEditBox", KethoEditBoxScrollFrame)
-        eb:SetSize(sf:GetSize())
-        eb:SetMultiLine(true)
-        eb:SetAutoFocus(false)-- dont automatically focus
-        eb:SetFontObject("ChatFontNormal")
-        eb:SetScript("OnEscapePressed", function()f:Hide() end)
-        sf:SetScrollChild(eb)
-
-        f:Show()
-    end
+function HunterInfo()
     
-    if text then
-        ReportEditBox:SetText(text)
-    end
-    ReportBox:Show()
+    HunterInfoPanel = CreateFrame("Frame", "InfoPanel", UIParent, "TooltipBorderedFrameTemplate")
+    HunterInfoPanel:SetWidth(800)
+    HunterInfoPanel:SetHeight(600)
+    HunterInfoPanel:SetPoint("CENTER")
+    HunterInfoPanel:SetMovable(false)
+    HunterInfoPanel:SetResizable(false)
+    HunterInfoPanel:SetFrameStrata("TOOLTIP")
+    HunterInfoPanel:Hide()
+
+
+
 end

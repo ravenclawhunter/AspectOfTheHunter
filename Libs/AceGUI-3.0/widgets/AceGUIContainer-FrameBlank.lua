@@ -1,7 +1,7 @@
 --[[-----------------------------------------------------------------------------
 Frame Container
 -------------------------------------------------------------------------------]]
-local Type, Version = "FrameBlank", 27
+local Type, Version = "FrameBlank", 2
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -191,7 +191,7 @@ local function Constructor()
     frame:SetResizable(false)
     frame:SetFrameStrata("FULLSCREEN_DIALOG")
     --frame:SetBackdrop(FrameBackdrop)
-    --frame:SetBackdropColor(0, 0, 0, 1)
+    frame:SetBackdropColor(0, 0, 0, 1)
     --frame:SetMinResize(400, 200)
     frame:SetToplevel(true)
     frame:SetScript("OnShow", Frame_OnShow)
@@ -210,9 +210,9 @@ local function Constructor()
     statusbg:SetPoint("BOTTOMLEFT", 15, 15)
     statusbg:SetPoint("BOTTOMRIGHT", -132, 15)
     statusbg:SetHeight(24)
-    --statusbg:SetBackdrop(PaneBackdrop)
-    --statusbg:SetBackdropColor(0.1, 0.1, 0.1)
-    --statusbg:SetBackdropBorderColor(0.4, 0.4, 0.4)
+    statusbg:SetBackdrop(PaneBackdrop)
+    statusbg:SetBackdropColor(0.1, 0.1, 0.1)
+    statusbg:SetBackdropBorderColor(0.4, 0.4, 0.4)
     statusbg:SetScript("OnEnter", StatusBar_OnEnter)
     statusbg:SetScript("OnLeave", StatusBar_OnLeave)
     
