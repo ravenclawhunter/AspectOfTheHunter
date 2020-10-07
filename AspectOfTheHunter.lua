@@ -143,7 +143,7 @@ end
 
 
 function AspectOfTheHunter:OnUpdate(sinceLastUpdate)
-    
+    self:UpdateWorldMapPins()
     self:CheckZone()
     self.sinceLastUpdate = (self.sinceLastUpdate or 0) + sinceLastUpdate;
     if (self.sinceLastUpdate >= DELAY) then
@@ -558,6 +558,7 @@ function AspectOfTheHunter:CheckWorldMap()
         if (worldMapID ~= WORLD_MAP_ID) then
             AspectOfTheHunter:DrawWorldMapPins();
             AspectOfTheHunter:LoadStableMasters()
+            
         end
     --self:UpdateWorldMapPins();
     end
@@ -711,12 +712,12 @@ function AspectOfTheHunter:LoadNPCData(data)
     
     local npcSpells = data[KEY_SPELLS];
     
-    -- Pre-load the spells to prevent bugs on tooltips
-    if (#npcSpells > 0) then
-        for s, spellID in pairs(npcSpells) do
-            local spellName, spellRank, spellIcon = GetSpellInfo(spellID);
-        end
-    end
+    ---- Pre-load the spells to prevent bugs on tooltips
+    --if (#npcSpells > 0) then
+    --    for s, spellID in pairs(npcSpells) do
+    --        local spellName, spellRank, spellIcon = GetSpellInfo(spellID);
+    --    end
+    --end
     
     
     
