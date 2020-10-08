@@ -575,6 +575,7 @@ function ClassCheck(id)
             
             
             if (AOTH.test[i]["class"] == "Rare" or AOTH.test[i]["class"] == "Rare_Elite") then
+                
                 return true
             end
         
