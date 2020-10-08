@@ -29,7 +29,7 @@ function eventFrame:OnEvent(event, arg1)
     end
     
     if (event == "PET_STABLE_SHOW") then
-        ScanStable()
+        --ScanStable()
     end
 
 
