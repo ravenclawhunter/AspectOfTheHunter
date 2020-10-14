@@ -1,6 +1,6 @@
 local AddOnName, AOTH = ...;
 
-ADDON_VERSION = "1.8.1BETA"
+ADDON_VERSION = "1.8.5BETA"
 if(UnitClass("player") ~= "Hunter") then return end
 function AOTH:TableMerge(table1, table2)
     

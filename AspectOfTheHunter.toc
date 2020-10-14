@@ -1,4 +1,4 @@
-## Interface: 80300
+## Interface: 90001
 ## Title: Aspect Of The Hunter [BETA]
 ## Author: Ravenclaw The Hunter
 ## Notes: Hunters guide to find all pets in wow!
