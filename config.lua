@@ -1,5 +1,7 @@
+
 AspectOfTheHunter = LibStub("AceAddon-3.0"):NewAddon("AspectOfTheHunter", "AceConsole-3.0", "AceEvent-3.0")
 AddOnName, AOTH = ...;
+local L = LibStub("AceLocale-3.0"):GetLocale("AOTH")
 
 -- this is a branch test
 AOTH.constants = {
@@ -34,7 +36,7 @@ function AspectOfTheHunter:OnInitialize()
     
     self.db = LibStub("AceDB-3.0"):New("AspectDB", DEFAULTS)
     AOTH.db = self.db.profile;
-    AOTH:initCheck()
+    AOTH:ResetCheck()
     self:InitializeZones();
     self:CheckZone();
     AOTH:LoadOptions()
@@ -49,7 +51,7 @@ function AOTH:LoadOptions()
     
     
     local options = {
-        name = "Aspect Of The Hunter",
+        name = L["ADDON_NAME"],
         handler = AspectOfTheHunter,
         type = "group",
         childGroups = "tab",
@@ -61,8 +63,8 @@ function AOTH:LoadOptions()
                 desc = "Configure the basics of AOTH",
                 args = {
                     TargetSystem = {
-                        name = "Enable targeting system",
-                        desc = "This option allows you to turn off the target system of the addon for those using other addons like \"NPCSCAN\"!",
+                        name = L["ENABLE_TARGET_SYSTEM"],
+                        desc = L["ENABLE_TARGET_SYSTEM_DESC"],
                         type = "toggle",
                         order = 0,
                         get = function()
@@ -74,8 +76,8 @@ function AOTH:LoadOptions()
                         width = "full",
                     },
                     MoveMapIcon = {
-                        name = "Make map icon moveable",
-                        desc = "This option allows you to make the map icon ( book ) for pets movable otherwise its default is top right of the map",
+                        name = L["MOVE_MAP_ICON"],
+                        desc = L["MOVE_MAP_ICON_DESC"],
                         type = "toggle",
                         order = 1,
                         get = function()
@@ -89,8 +91,8 @@ function AOTH:LoadOptions()
                         width = "full",
                     },
                     ToggleMiniMapIcon = {
-                        name = "Disable minimap icons",
-                        desc = "This option allows you to Toggle minimap icons on and off",
+                        name = L["DISABLE_MINIMAP_ICONS"],
+                        desc = L["DISABLE_MINIMAP_ICONS_DESC"],
                         type = "toggle",
                         order = 2,
                         get = function()
@@ -106,7 +108,7 @@ function AOTH:LoadOptions()
                     },
                     BeastLoreTooltip = {
                         name = "Disable tooltip creature info",
-                        desc = "This option allows you to remove the \"Beast Lore\" function when hovering over a wild or tamed creature",
+                        desc = L["DISABLE_TOOTIP_DESC"],
                         type = "toggle",
                         order = 3,
                         get = function()
@@ -121,8 +123,8 @@ function AOTH:LoadOptions()
                         width = "full",
                     },
                     ResizeStableIcon = {
-                        name = "Smaller Stable Master Icons",
-                        desc = "Enabling this option allows you to shrink the master icons!",
+                        name = L["SMALLER_STABLE_ICONS"],
+                        desc = L["SMALLER_STABLE_ICONS_DESC"],
                         type = "toggle",
                         order = 4,
                         get = function()
@@ -137,7 +139,7 @@ function AOTH:LoadOptions()
                         width = "full",
                     },
                     MinimalMapIcons = {
-                        name = "Smaller Map Icons",
+                        name = L["SMALLER_MAP_ICONS"],
                         desc = "Enabling this option will shrink and set a basic tooltip to all other pins except the first location of the pet you are after. This requires you to reload your UI... You can do so by typing |cFF00FF00 /rl",
                         type = "toggle",
                         order = 5,
@@ -223,14 +225,14 @@ local ldb = LibStub("LibDataBroker-1.1"):NewDataObject("AspectOfTheHunter", {
 local popup;
 local active = false
 MyModData = {}
+
 function ldb.OnClick(self, button)
     
     local shift_key = IsShiftKeyDown()
-    
     tinsert(UISpecialFrames, PetStableFrame:GetName())
     if button == "RightButton" then
         if (shift_key) then
-            InterfaceOptionsFrame_OpenToCategory("Aspect Of The Hunter")InterfaceOptionsFrame_OpenToCategory("Aspect Of The Hunter")-- need to call this twice due to a blizzard bug
+            InterfaceOptionsFrame_OpenToCategory("Aspect Of The Hunter")InterfaceOptionsFrame_OpenToCategory("Aspect Of The Hunter")
         elseif (PetStableFrame:IsVisible()) then
             
             PetStableFrame:Hide()
@@ -239,7 +241,10 @@ function ldb.OnClick(self, button)
         end
     
     else
+        
+
         if not (active and popup) then
+            
             popup = addon:Create("Frame")
             popup:SetTitle(UnitName("player") .. "'s Information")
             popup:SetStatusText("You're on version: " .. ADDON_VERSION)
@@ -290,8 +295,11 @@ function ldb.OnClick(self, button)
             
             end)
             popup:AddChild(announce)
-            
+            PlaySound(6521, "master")
         
+        else
+            popup:Hide()
+            PlaySound(799, "master")
         end
     
     
@@ -299,42 +307,6 @@ function ldb.OnClick(self, button)
     end
 end
 
-function AOTH:ShowPopup()
-    
-    links = CreateFrame("Frame", "Links", InfoFrame, "InsetFrameTemplate3")
-    links:SetWidth(300)
-    links:SetHeight(100)
-    links:SetPoint("CENTER")
-    links:SetMovable(false)
-    links:SetResizable(false)
-    links:SetFrameStrata("TOOLTIP")
-    links:Hide()
-    
-    copyBox = CreateFrame("EditBox", "LinkBox", Links, "InputBoxTemplate")
-    copyBox:SetWidth(200)
-    copyBox:SetHeight(30)
-    copyBox:SetPoint("TOP", 0, -10)
-    copyBox:SetText("https://discord.gg/GzHEU5k")
-    copyBox:ClearFocus()
-    copyBox:SetScript("OnTextChanged", function(self)self:SetText("https://discord.gg/GzHEU5k") end)
-    copyBox:Hide()
-    
-    local cbf = copyBox:CreateFontString("Info", "TOOLTIP", "GameFontNormal")
-    cbf:SetText("Press CTRL + C to save to clipboard!")
-    cbf:SetPoint("CENTER", 0, -20)
-    
-    
-    local ok1 = CreateFrame("Button", "Okay", Links, "UIPanelButtonTemplate")
-    ok1:SetWidth(50)
-    ok1:SetHeight(30)
-    ok1:SetPoint("BOTTOM", 0, 10)
-    ok1:SetText("OK")
-    ok1:SetScript("OnClick", function()links:Hide() end)
-    ok1:Show()
-
-end
-
-AOTH:ShowPopup()
 MyModData = {}
 function MyMod_OnLoad()
     

@@ -60,3 +60,21 @@ v1.4.1
 
 FIXES
 - Fixed in correct level from being shown
+
+
+v1.8.6BETA
+
+Quality Of Life Updates
+-  Added the ability to close minimap icon menu with either pressing escape or clicking the icon again
+
+FIXES
+-  System reporting twice after taming a pet both pet tamed and pet already tamed
+-  Removed Dot the camel from showing as tameable 
+-  map pins showing as green squares now show as correct icon
+-  Fixed error when hovering certain icons on the map
+-  Fixed issue where Quillens were renamed to Stone Hounds and now they display the right icon
+-  Fixed Rare alert frame from showing in combat and cleaned up the code
+-  Fixed Rare target feature from targetting player pets
+-  Fixed some pet locations
+-  Fixed issue where games crashes after hovering over to many pins in quick Succession
+ 

@@ -3,7 +3,7 @@
 ## Author: Ravenclaw The Hunter
 ## Notes: Hunters guide to find all pets in wow!
 ## DefaultState: enabled
-## Version: 1.8.1BETA
+## Version: 1.8.6BETA
 ## OptionalDeps: Ace3, HereBeDragons
 ## SavedVariables: petlogDB, AOTHLDBIconDB, AspectDB
 

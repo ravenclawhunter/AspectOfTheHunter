@@ -1,7 +1,7 @@
 local AddOnName, AOTH = ...;
 
-ADDON_VERSION = "1.8.5BETA"
-if(UnitClass("player") ~= "Hunter") then return end
+ADDON_VERSION = "1.8.6BETA"
+if (UnitClass("player") ~= "Hunter") then return end
 function AOTH:TableMerge(table1, table2)
     
     local pets = {}
@@ -83,6 +83,14 @@ function AOTH:LoadPetModel(container)
 
 end
 
+function AOTH:ArrayInit()
+
+    local rare_frame = CreateFrame("Frame", "PET_NOT_FOUND")
+
+    return rare_frame
+
+end
+
 
 function AOTH:SetSpellTooltip(self, spellID)
     
@@ -105,6 +113,7 @@ function AOTH:Increment(value, flag)
     else
         return 1
     end
-    
+
 
 end
+

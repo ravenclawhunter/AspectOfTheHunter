@@ -1,5 +1,6 @@
 AspectOfTheHunter = LibStub("AceAddon-3.0"):GetAddon("AspectOfTheHunter")
 AddOnName, AOTH = ...;
+local L = LibStub("AceLocale-3.0"):GetLocale("AOTH")
 
 if(UnitClass("player") ~= "Hunter") then return end
 
@@ -8,18 +9,11 @@ local checkFamily = {}
 local zonecheck = {}
 local flag = false
 
-function AOTH:initCheck()
+function AOTH:ResetCheck()
     
-    for i = 1, #AOTH.families do
-        checkFamily[i] = false
-        
-    end
+    table.wipe(checkFamily)
+    table.wipe(zonecheck)
     
-    
-    --[[for i = 1, #AOTH.zones do
-        zonecheck[i] = false
-    
-    end]]
 end
 
 
@@ -135,7 +129,7 @@ function AOTH:DropDown(frame)
             if level == 1 then
                 -- Create the title of the menu
                 info.isTitle = 1
-                info.text = "Hunter Pets:"
+                info.text = L["HUNTER_PETS_MENU_TITLE"]
                 info.notCheckable = 1
                 UIDropDownMenu_AddButton(info, level)
                 
@@ -146,7 +140,7 @@ function AOTH:DropDown(frame)
                 
                 info.disabled = nil
                 info.isTitle = nil
-                info.text = "Search for Family: "
+                info.text = L["FAMILY_SEARCH"]
                 info.notCheckable = true
                 info.keepShownOnClick = true
                 info.hasArrow = true
@@ -155,7 +149,7 @@ function AOTH:DropDown(frame)
                 
                 info.disabled = nil
                 info.isTitle = nil
-                info.text = "Search In Zone: "
+                info.text = L["ZONE_SEARCH"]
                 info.notCheckable = true
                 info.keepShownOnClick = true
                 info.hasArrow = true
@@ -164,7 +158,7 @@ function AOTH:DropDown(frame)
                 
                 info.disabled = nil
                 info.isTitle = nil
-                info.text = "Exotics: "
+                info.text = L["EXOTICS_SEARCH"]
                 info.notCheckable = true
                 info.keepShownOnClick = true
                 info.hasArrow = true
@@ -175,7 +169,7 @@ function AOTH:DropDown(frame)
                 
                 info.disabled = nil
                 info.isTitle = nil
-                info.text = "Scan Current Zone "
+                info.text = L["SCAN_ZONE"]
                 info.notCheckable = true
                 info.keepShownOnClick = true
                 info.hasArrow = false
@@ -208,7 +202,7 @@ function AOTH:DropDown(frame)
                 info.notCheckable = true
                 info.keepShownOnClick = true
                 info.hasArrow = false
-                info.func = function()AspectOfTheHunter:HideWorldMapPins()AspectOfTheHunter:ResetMenu()AOTH:initCheck()AspectOfTheHunter:HideMinimapPins(); end
+                info.func = function()AspectOfTheHunter:HideWorldMapPins()AspectOfTheHunter:ResetMenu()AOTH:ResetCheck()AspectOfTheHunter:HideMinimapPins(); end
                 UIDropDownMenu_AddButton(info, level)
                 
                 info.isTitle = false
@@ -245,7 +239,7 @@ function AOTH:DropDown(frame)
                     
                     info.disabled = nil
                     info.isTitle = nil
-                    info.text = "F  to M: "
+                    info.text = "F to M: "
                     info.notCheckable = true
                     info.keepShownOnClick = true
                     info.hasArrow = true
@@ -254,7 +248,7 @@ function AOTH:DropDown(frame)
                     
                     info.disabled = nil
                     info.isTitle = nil
-                    info.text = "N  to S: "
+                    info.text = "N to S: "
                     info.notCheckable = true
                     info.keepShownOnClick = true
                     info.hasArrow = true
@@ -263,7 +257,7 @@ function AOTH:DropDown(frame)
 
                     info.disabled = nil
                     info.isTitle = nil
-                    info.text = "T  to U: "
+                    info.text = "T to U: "
                     info.notCheckable = true
                     info.keepShownOnClick = true
                     info.hasArrow = true
@@ -272,7 +266,7 @@ function AOTH:DropDown(frame)
 
                     info.disabled = nil
                     info.isTitle = nil
-                    info.text = "V  to Z: "
+                    info.text = "V to Z: "
                     info.notCheckable = true
                     info.keepShownOnClick = true
                     info.hasArrow = true

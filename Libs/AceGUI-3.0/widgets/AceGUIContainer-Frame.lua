@@ -193,6 +193,7 @@ local function Constructor()
 	frame:SetScript("OnShow", Frame_OnShow)
 	frame:SetScript("OnHide", Frame_OnClose)
 	frame:SetScript("OnMouseDown", Frame_OnMouseDown)
+	tinsert(UISpecialFrames, frame:GetName())
 
 	local closebutton = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
 	closebutton:SetScript("OnClick", Button_OnClick)

@@ -3,7 +3,7 @@ AddOnName, AOTH = ...;
 AspectOfTheHunter = LibStub("AceAddon-3.0"):GetAddon("AspectOfTheHunter")
 local HBD = LibStub("HereBeDragons-2.0")
 local petPins = LibStub("HereBeDragons-Pins-2.0")
-
+local L = LibStub("AceLocale-3.0"):GetLocale("AOTH")
 
 ----------------------------------------------------------
 -- TODO
@@ -26,7 +26,7 @@ end
 local ICON_PATH = "Interface\\AddOns\\" .. AOTH.constants["ADDON_NAME"] .. "\\Icons\\";
 
 
-
+local RARE_COLLECTION = {}
 local KEY_WORLD_MAP_PIN = "worldpin";
 local KEY_ZONE_NAME = "zonename";
 local KEY_NPC_NAME = "npcname";
@@ -314,12 +314,12 @@ function AspectOfTheHunter:ShowFurtherPetInfo(pin)
     for i = 1, #petinfo do
         if (petinfo[i][1] == npcData[KEY_FAMILY]) then
             if (petinfo[i][3] == true) then
-                GameTooltip:AddLine("EXOTIC (BM ONLY)");
+                GameTooltip:AddLine(L["EXOTIC"]);
                 GameTooltip:AddTexture("Interface\\MINIMAP\\Minimap_shield_elite.blp");
                 GameTooltip:AddLine(" ");
             end
             
-            GameTooltip:AddLine("SPECIALTY:  " .. string.upper(petinfo[i][2]));
+            GameTooltip:AddLine(L["SPECIALTY"] .. string.upper(petinfo[i][2]));
             for k, v in pairs(AOTH.specSkills) do
                 if (petinfo[i][2] == k) then
                     local spName, sp, spIcon = GetSpellInfo(v[1])
@@ -331,7 +331,7 @@ function AspectOfTheHunter:ShowFurtherPetInfo(pin)
                 end
             end
             GameTooltip:AddLine(" ");
-            GameTooltip:AddLine("COMMON ABILITIES: ");
+            GameTooltip:AddLine(L["COMMON_ABILITIES"]);
             local spName, sp, spIcon = GetSpellInfo(GROWL)
             GameTooltip:AddLine(spName, 1, 1, 1);
             GameTooltip:AddTexture(spIcon);
@@ -360,7 +360,7 @@ function AspectOfTheHunter:ShowFurtherPetInfo(pin)
 
 end
 
-
+petModel = CreateFrame("PlayerModel", nil, GameTooltip)
 -- Pet Tool TIP
 function AspectOfTheHunter:ShowPinTooltip(pin)
     
@@ -397,18 +397,22 @@ function AspectOfTheHunter:ShowPinTooltip(pin)
         else
             GameTooltip:SetText(npcName .. " (" .. npcFamily .. ") ", npcColor[1], npcColor[2], npcColor[3]);
         end
-        if (npcMINLevel == npcMAXLevel) then
-            GameTooltip:AddLine("Level " .. npcMAXLevel / 2 .. " ", 1, 1, 1);
+        if (strmatch(npcMINLevel, "%d") or strmatch(npcMAXLevel, "%d")) then
+            if (npcMINLevel == npcMAXLevel) then
+                GameTooltip:AddLine("Level " .. npcMAXLevel / 2 .. " ", 1, 1, 1);
+            else
+                GameTooltip:AddLine(string.format("|c0070ddff%-6s|r%s |c00ffffff%d|r\n|c0070ddff%-5s|r%s |c00ffffff%d|r\n|c00ff0000%s", "MIN", L["LEVEL"], npcMINLevel / 2, "MAX", L["LEVEL"], npcMAXLevel / 2, npcType));
+            end
         else
-            
-            GameTooltip:AddLine(string.format("|c0070ddff%-6s|r%s |c00ffffff%d|r\n|c0070ddff%-5s|r%s |c00ffffff%d|r\n|c00ff0000%s", "MIN", "Level: ", npcMINLevel / 2 , "MAX", "Level: ", npcMAXLevel / 2, npcType));
+            GameTooltip:AddLine(string.format("|c0070ddff%-6s|r%s |c00ffffff%s|r\n|c0070ddff%-5s|r%s |c00ffffff%s|r\n|c00ff0000%s", "MIN", L["LEVEL"], npcMINLevel, "MAX", L["LEVEL"], npcMAXLevel, npcType));
+        
         end
         GameTooltip:AddLine(npcClass, 0.7, 0.7, 0.7);
         
         
         
         local scale = GameTooltip:GetEffectiveScale();
-        petModel = CreateFrame("PlayerModel", nil, GameTooltip)
+       
         
         
         for k, v in pairs(AOTH.test) do
@@ -464,12 +468,12 @@ function AspectOfTheHunter:ShowPinTooltip(pin)
             
             for i = 1, #AOTH.test do
                 if (tostring(npcName) == AOTH.test[i]["name"] and AOTH.test[i]["react"][1] == 1 and AOTH.test[i]["react"][2] == 1) then
-                    GameTooltip:AddLine("FRIENDLY TO: |c0000ff00 \nBOTH FACTIONS");
+                    GameTooltip:AddLine(L["BOPTH_FACTIONS"]);
                 elseif (tostring(npcName) == AOTH.test[i]["name"] and AOTH.test[i]["react"][1] == 1) then
-                    GameTooltip:AddLine("FRIENDLY TO: |c0000ff00 \nTHE ALLIANCE");
+                    GameTooltip:AddLine(L["ALLIANCE_FRIEND"]);
                 
                 elseif (tostring(npcName) == AOTH.test[i]["name"] and AOTH.test[i]["react"][2] == 1) then
-                    GameTooltip:AddLine("FRIENDLY TO: |c0000ff00 \nTHE HORDE");
+                    GameTooltip:AddLine(L["HORDE_FRIEND"]);
                 
                 
                 end
@@ -558,39 +562,41 @@ function AspectOfTheHunter:CheckWorldMap()
         if (worldMapID ~= WORLD_MAP_ID) then
             AspectOfTheHunter:DrawWorldMapPins();
             AspectOfTheHunter:LoadStableMasters()
-            
+        
         end
     --self:UpdateWorldMapPins();
     end
 
 end
 
-function ClassCheck(id)
+function RareCheck(id, npc_id,npcType)
     
-    
-    
-    for i = 1, #AOTH.test do
+    local class = UnitClassification(id)
+    local isTameable, isPlayerpet
+
+    if(npcType == "Pet") then isPlayerpet = false end
+
+    if (class == "rare" or class == "elite") then
         
-        if (AOTH.test[i]["id"] == id) then
+        for dID = 1, #AOTH.tamablePets do
             
-            
-            if (AOTH.test[i]["class"] == "Rare" or AOTH.test[i]["class"] == "Rare_Elite") then
+            if (tonumber(npc_id) == AOTH.tamablePets[dID]) then
                 
-                return true
+                isTameable = true
             end
         
-        
         end
-    
+        
+        return true, isTameable, isPlayerpet
     end
-
-
-
 
 end
 
+local ef = CreateFrame("Frame")
+ef:RegisterEvent("PLAYER_REGEN_DISABLED")
+ef:RegisterEvent("PLAYER_REGEN_ENABLED")
+
 function AspectOfTheHunter:Nearby()
-    
     
     if UnitOnTaxi("player") then return end
     
@@ -598,40 +604,83 @@ function AspectOfTheHunter:Nearby()
     
     if (InCombatLockdown() or not mapID) then return end
     
-    local petsToScan = AOTH:PetsInZone()
-    for d = 1, #petsToScan do
-        for i = 1, 20 do
-            local npcID = _G.UnitGUID("nameplate" .. i);
+    for i = 1, 10 do
+        local npcID = UnitGUID("nameplate" .. i);
+        
+        
+        if npcID then
             
-            if npcID then
+            local npcType, zero, server_id, instance_id, zone_uid, npc_id, spawn_uid = ("-"):split(npcID);
+            local isRare, isTameable, isPlayerpet = RareCheck("nameplate" .. i, npc_id, npcType)
+            
+            
+            if (isRare and isTameable and isPlayerpet and select(3, UnitClass("player")) == 3 and AOTH.db.general.TargetSystem) then
                 
-                local type, zero, server_id, instance_id, zone_uid, npc_id, spawn_uid = ("-"):split(npcID);
-                
-                if (ClassCheck(tonumber(npc_id)) and tonumber(npc_id) == petsToScan[d] and select(1, UnitClass("player") == "Hunter") and AOTH.db.general.TargetSystem) then
-                    if not GetRaidTargetIndex("nameplate" .. i) then
-                        
-                        _G.SetRaidTarget("nameplate" .. i, 8)
-                        AOTH:CreateTargetButton(tonumber(npc_id))
-                        
-                        print("|cFF00FF00[" .. AOTH.constants["ADDON_NAME"] .. "]: |cFFFFFFFF" .. string.upper(UnitClassification("nameplate" .. i)) .. " PET |c0069CCF0[" .. string.upper(UnitName("nameplate" .. i)) .. "]|r FOUND!");
+                ef:SetScript("OnEvent", function(self, event)
+                    if (event == "PLAYER_REGEN_DISABLED") then
+                        _G["TB_" .. npc_id]:Hide()
+                        SetRaidTarget("Player", 8)
+                        SetRaidTarget("Player", 0)
                     end
+                
+                end)
+                
+                if not GetRaidTargetIndex("nameplate" .. i) then
+                    
+                    
+                    SetRaidTarget("nameplate" .. i, 8)
+                    
+                    local family = UnitCreatureFamily("nameplate" .. i)
+                    local name = UnitName("nameplate" .. i)
+                    local RARE_FRAME_FOUND = false
+                    
+
+                    for RARE = 1, #RARE_COLLECTION do
+                        
+                        local id = string.sub(RARE_COLLECTION[RARE]:GetName(), 4)
+                        
+                        if (tonumber(id) == tonumber(npc_id)) then
+                            print("RARE FOUND IN TABLE! NUM OF CREATED FRAMES: " .. #RARE_COLLECTION)
+                            RARE_COLLECTION[RARE]:SetAttribute("type1", "macro")
+                            RARE_COLLECTION[RARE]:SetAttribute("macrotext", "/cleartarget\n/target " .. name)
+                            PlaySoundFile("Interface\\AddOns\\AspectOfTheHunter\\Sounds\\Event_wardrum_ogre-1.ogg", "Master")
+                            RARE_COLLECTION[RARE]:Show()
+                            RARE_FRAME_FOUND = true
+                            break;
+                        end
+                    
+                    
+                    end
+                    
+                    if not (RARE_FRAME_FOUND) then
+                        print("NEW ENTRY ADDED TO TABLE")
+                        table.insert(RARE_COLLECTION, 1, AOTH:CreateTargetButton(tonumber(npc_id), family, name, "nameplate" .. i))
+                        RARE_COLLECTION[1]:SetAttribute("type1", "macro")
+                        RARE_COLLECTION[1]:SetAttribute("macrotext", "/cleartarget\n/target " .. name)
+                        RARE_COLLECTION[1]:HookScript("OnClick", function(self, button)
+                            if (button == "RightButton") then
+                                
+                                RARE_COLLECTION[1]:Hide()
+                                RARE_COLLECTION[1]:SetAttribute("macrotext", "/cleartarget")
+                            
+                            end
+                        end)
+                        RARE_COLLECTION[1]:Show()
+                        RARE_FRAME_FOUND = false
+                    end
+                    
+                    print("|cFF00FF00[" .. L["ADDON_NAME"] .. "]: |cFFFFFFFF" .. string.upper(UnitClassification("nameplate" .. i)) .. " " .. L["PET"] .. " |c0069CCF0[" .. string.upper(name) .. "]|r " .. L["FOUND"]);
                 end
             end
         end
     end
+
 end
 
 
 
 
 -- World Map --
-
-
-
-
-
-
-
 function AspectOfTheHunter:DrawWorldMapPins()
     
     AspectOfTheHunter:HideWorldMapPins();
@@ -719,9 +768,6 @@ function AspectOfTheHunter:LoadNPCData(data)
     --        local spellName, spellRank, spellIcon = GetSpellInfo(spellID);
     --    end
     --end
-    
-    
-    
     data[KEY_LOADED] = true;
     data[KEY_WORLD_MAP_PIN] = AspectOfTheHunter:CreateMapPin(WORLD_MAP_CONTAINER, data);
 
@@ -730,13 +776,12 @@ end
 
 
 --[[ SHOW FUNCTIONS ]]
-
 function AspectOfTheHunter:ShowWorldMapNPC(data, familyToSHow)
     self:LoadNPCData(data);
     npcPin = data[KEY_WORLD_MAP_PIN];
-
     
-
+    
+    
     local zoneID = tonumber(familyToSHow);
     if (data[KEY_ZONE_NAME] == zoneID) then
         npcPin:Show();
@@ -744,7 +789,7 @@ function AspectOfTheHunter:ShowWorldMapNPC(data, familyToSHow)
         npcPin:Show();
     end
 
-   
+
 
 
 
@@ -757,13 +802,13 @@ function AspectOfTheHunter:ShowWorldMapPins()
     local zoneData = AspectOfTheHunter:GetZoneData(WORLD_MAP_ID);
     
     if (zoneData == nil) then return end
-
+    
     for i = PIN_POSITION, #PETS_TO_LOAD do
         
         for npcName, npcData in pairs(zoneData) do
             
             npcPin = npcData[KEY_WORLD_MAP_PIN]
-
+            
             self:ShowWorldMapNPC(npcData, PETS_TO_LOAD[i]);
             
             table.insert(WORLD_MAP_PINS, npcPin)
@@ -822,9 +867,6 @@ end
 
 
 --------- END SHOW FUNCTIONS -------------
-
-
-
 function AspectOfTheHunter:ResetMenu()
     
     table.wipe(PETS_TO_LOAD);
@@ -837,8 +879,6 @@ end
 
 
 --[[ VV  HIDE FUNCTIONS    VV  ]]
-
-
 function AspectOfTheHunter:HideWorldMapNPC(data)
     npcPin = data[KEY_WORLD_MAP_PIN];
     
@@ -856,7 +896,7 @@ function AspectOfTheHunter:SetFamilyToHide(petFamily)
         end
     
     end
-
+    
     for i = 1, #MINI_PETS_TO_LOAD do
         if (MINI_PETS_TO_LOAD[i] == petFamily) then
             table.remove(MINI_PETS_TO_LOAD, i);
@@ -905,16 +945,11 @@ function AspectOfTheHunter:HideWorldMapPins()
 end
 
 --[[ ^^   END OF HIDE FUNCTIONS    ^^  ]]
-
-
-
 --[[
-    
-      MINIMAP FUNCTIONS
+
+MINIMAP FUNCTIONS
 
 ]]
-
-
 local pinCache = {}
 local minimapPins = {}
 pinCount = 0
@@ -1041,7 +1076,6 @@ end
 
 
 -- HELPER FUNCTIONS
-
 function WorldMapAvailable()
     
     if not (WorldMapFrame:IsVisible()) then
