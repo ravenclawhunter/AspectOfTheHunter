@@ -16,6 +16,9 @@ DEBUG SECTION
 SLASH_RELOADUI1 = "/rl"
 SlashCmdList.RELOADUI = ReloadUI
 
+SLASH_VERSION1 = "/ver"
+SlashCmdList.VERSION = function() print("|cFF00FF00 The version of AOTH you are using is:|r " .. ADDON_VERSION) end
+
 SLASH_FRAMESTK1 = "/fs"
 SlashCmdList.FRAMESTK = function()
     LoadAddOn("Blizzard_DebugTools")
@@ -356,11 +359,16 @@ function AspectOfTheHunter:ShowFurtherPetInfo(pin)
     
     petModel:ClearModel()
     petModel:Hide()
+    petModel:RefreshUnit()
     GameTooltip:Show();
 
 end
 
-petModel = CreateFrame("PlayerModel", nil, GameTooltip)
+petModel = CreateFrame("PlayerModel", "petView", GameTooltip)
+
+       
+
+test = CreateFrame("Frame",nil,GameTooltip)
 -- Pet Tool TIP
 function AspectOfTheHunter:ShowPinTooltip(pin)
     
@@ -388,6 +396,7 @@ function AspectOfTheHunter:ShowPinTooltip(pin)
     
     
     GameTooltip:SetOwner(pin, "ANCHOR_BOTTOMRIGHT");
+    
     if (npcData[KEY_PIN_ID] == 1) then
         if (npcClass == CLASS_STABLE_MASTER) then npcType = "NPC" end
         if (#npcName > 15 and #npcName <= 20) then
@@ -409,23 +418,24 @@ function AspectOfTheHunter:ShowPinTooltip(pin)
         end
         GameTooltip:AddLine(npcClass, 0.7, 0.7, 0.7);
         
+        test:SetSize(GameTooltip:GetWidth(),GameTooltip:GetHeight())
         
+
+
         
-        local scale = GameTooltip:GetEffectiveScale();
-       
-        
-        
-        for k, v in pairs(AOTH.test) do
-            if (npcID == AOTH.test[k]["id"]) then
-                petModel:SetDisplayInfo(AOTH.test[k]["displayID"])
-            end
-        end
-        petModel:SetFrameStrata("TOOLTIP")
-        petModel:SetPoint("TOPRIGHT", -4, -40)
-        petModel:SetFacing(20 * math.pi / 180);
         
         petModel:SetSize(GameTooltip:GetWidth() / 2, GameTooltip:GetHeight() * 3)
-        petModel:SetScale(1.00)
+        --petModel:SetSize(150,150)
+        local scale = (petModel:GetWidth() + petModel:GetHeight()) / 100 ;
+        
+        petModel:SetFrameStrata("TOOLTIP")
+        petModel:SetCreature(npcID)
+        petModel:SetCreature(npcID)
+        petModel:SetPoint("TOPRIGHT", -4, -40)
+        petModel:SetFacing(20 * math.pi / 180);
+        petModel:TransformCameraSpaceToModelSpace(10, 0, 50)
+        --petModel:SetCamDistanceScale(1.5)
+        
         petModel:Show()
         
         
@@ -574,9 +584,9 @@ function RareCheck(id, npc_id,npcType)
     local class = UnitClassification(id)
     local isTameable, isPlayerpet
 
-    if(npcType == "Pet") then isPlayerpet = false end
+    if(npcType == "Pet") then isPlayerpet = false else isPlayerpet = true end
 
-    if (class == "rare" or class == "elite") then
+    if (class == "rare" or class == "rareelite") then
         
         for dID = 1, #AOTH.tamablePets do
             
@@ -611,6 +621,7 @@ function AspectOfTheHunter:Nearby()
         if npcID then
             
             local npcType, zero, server_id, instance_id, zone_uid, npc_id, spawn_uid = ("-"):split(npcID);
+            
             local isRare, isTameable, isPlayerpet = RareCheck("nameplate" .. i, npc_id, npcType)
             
             
@@ -640,7 +651,7 @@ function AspectOfTheHunter:Nearby()
                         local id = string.sub(RARE_COLLECTION[RARE]:GetName(), 4)
                         
                         if (tonumber(id) == tonumber(npc_id)) then
-                            print("RARE FOUND IN TABLE! NUM OF CREATED FRAMES: " .. #RARE_COLLECTION)
+                            
                             RARE_COLLECTION[RARE]:SetAttribute("type1", "macro")
                             RARE_COLLECTION[RARE]:SetAttribute("macrotext", "/cleartarget\n/target " .. name)
                             PlaySoundFile("Interface\\AddOns\\AspectOfTheHunter\\Sounds\\Event_wardrum_ogre-1.ogg", "Master")
@@ -653,7 +664,7 @@ function AspectOfTheHunter:Nearby()
                     end
                     
                     if not (RARE_FRAME_FOUND) then
-                        print("NEW ENTRY ADDED TO TABLE")
+                        
                         table.insert(RARE_COLLECTION, 1, AOTH:CreateTargetButton(tonumber(npc_id), family, name, "nameplate" .. i))
                         RARE_COLLECTION[1]:SetAttribute("type1", "macro")
                         RARE_COLLECTION[1]:SetAttribute("macrotext", "/cleartarget\n/target " .. name)

@@ -1,7 +1,6 @@
 local AddOnName, AOTH = ...;
 
-local stablePages = NUM_PET_STABLE_PAGES;
-local petSlots = NUM_PET_STABLE_SLOTS;
+
 
 local maxSlots = NUM_PET_STABLE_PAGES * NUM_PET_STABLE_SLOTS;
 local L = LibStub("AceLocale-3.0"):GetLocale("AOTH")

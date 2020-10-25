@@ -66,6 +66,7 @@ v1.8.6BETA
 
 Quality Of Life Updates
 -  Added the ability to close minimap icon menu with either pressing escape or clicking the icon again
+-  Added new slash command (/ver) to show the version of AOTH you are running
 
 FIXES
 -  System reporting twice after taming a pet both pet tamed and pet already tamed
